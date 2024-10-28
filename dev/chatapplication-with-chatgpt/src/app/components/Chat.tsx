@@ -1,4 +1,5 @@
 import React from 'react'
+import {FaBeer, FaPaperPlane } from "react-icons/fa";
 
 const Chat = () => {
   return (
@@ -21,6 +22,9 @@ const Chat = () => {
 
       <div className="flex-shrink-0 relative">
         <input type="text" placeholder="Send a Message" className="border-2 rounded w-full pr-10 focus:outline-none p-2" />
+        <button className="absolute inset-y-0 right-4 flex items-center">
+          <FaPaperPlane />
+        </button>
       </div>
 
     </div>
