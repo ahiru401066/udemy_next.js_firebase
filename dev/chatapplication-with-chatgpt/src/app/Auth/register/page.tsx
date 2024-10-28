@@ -1,8 +1,12 @@
 "use client";
 
 import { pages } from 'next/dist/build/templates/app-page'
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../../../../firebase";
 import React from 'react';
 import {useForm, SubmitHandler} from "react-hook-form";
+import {useRouter} from "next/navigation";
+import Link from 'next/link';
 
 type Inputs = {
   email: string;
@@ -10,6 +14,8 @@ type Inputs = {
 };
 
 export const Register = () => {
+const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -17,8 +23,25 @@ export const Register = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
+    await createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCrendential) => {
+        const user = userCrendential.user;
+        router.push("/auth/login");
+        console.log(user);
+      })
+      .catch((error) => {
+        // alert(error);
+        if(error.code === "auth/email-already-in-use") {
+          alert("このメールアドレスはすでに使用されています。");
+        } else {
+          alert(error.message);
+        }
+      });
   }
+
+
+
+
 
   return (
     <div className="h-screen flex flex-col items-center justify-center">
@@ -33,6 +56,10 @@ export const Register = () => {
         <input 
           {...register("email", {
             required: "メールアドレスは必須です。",
+            pattern: {
+              value:/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
+              message: "不適切なメールアドレスです。",
+            }
           })}
           type="text"
           className="mt-1 border-2 rounded-md w-full p-2"
@@ -43,7 +70,20 @@ export const Register = () => {
         <label className="block text-sm font-medium text-gray-600">
           Password
         </label>
-        <input type="password" className="mt-1 border-2 rounded-md w-full p-2"/>
+        <input 
+          {...register("password", {
+            required: "パスワードは必須です。",
+            minLength: {
+              value: 6,
+              message: "6文字以上入力してください。"
+            },
+          })}
+          type="password"
+          className="mt-1 border-2 rounded-md w-full p-2"
+        />
+        {errors.password && (
+          <span className="text-red-600 text-sm">{errors.password.message}</span>
+        )}
       </div>
 
       <div className="flex justify-end">
@@ -55,9 +95,12 @@ export const Register = () => {
         <span className="text-gray-600 text-sm">
           既にアカウントをお持ちですか？
         </span>
-        <button className="text-blue-500 text-sm font-bold ml-1 hover:text-blue-700">
-          ログインページへ
-        </button>
+        <Link
+          href={"/Auth/login"}
+          className="text-blue-500 text-sm font-bold ml-1 hover:text-blue-700"
+        >
+          ログイン
+        </Link>
       </div>
     </form>
   </div>
