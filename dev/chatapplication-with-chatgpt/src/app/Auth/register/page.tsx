@@ -6,6 +6,7 @@ import {auth} from "../../../../firebase";
 import React from 'react';
 import {useForm, SubmitHandler} from "react-hook-form";
 import {useRouter} from "next/navigation";
+import Link from 'next/link';
 
 type Inputs = {
   email: string;
@@ -94,9 +95,12 @@ const router = useRouter();
         <span className="text-gray-600 text-sm">
           既にアカウントをお持ちですか？
         </span>
-        <button className="text-blue-500 text-sm font-bold ml-1 hover:text-blue-700">
-          ログインページへ
-        </button>
+        <Link
+          href={"/Auth/login"}
+          className="text-blue-500 text-sm font-bold ml-1 hover:text-blue-700"
+        >
+          ログイン
+        </Link>
       </div>
     </form>
   </div>
