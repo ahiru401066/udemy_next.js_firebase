@@ -25,6 +25,8 @@ type AppContextType = {
   setSelectRoomName: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
+
+// 型を定義
 const defalutContextData = {
   user: null,
   userId: null,
