@@ -4,3 +4,6 @@
 FirebaseのCRUD処理を特に学びたい
 
 Open http://localhost:3000 with your browser to see the result.
+
+11/04開発中止
+理由：Nextのしくみ分からん
